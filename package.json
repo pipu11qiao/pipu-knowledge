@@ -1,0 +1,19 @@
+{
+  "name": "pipu-knowledge",
+  "version": "1.0.0",
+  "description": "pipu knowledge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pipu11qiao/pipu-knowledge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pipu11qiao/pipu-knowledge/issues"
+  },
+  "homepage": "https://github.com/pipu11qiao/pipu-knowledge#readme"
+}
