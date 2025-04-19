@@ -1,0 +1,14 @@
+
+# 书名
+title: "pandoc生成epub测试书籍"
+
+# 作者
+author: "pipu"
+
+# 简介 
+description: |
+ pandoc测试书籍，用来调研如何将markdown转为epub，后续好制作对应的书籍
+ 相信这是一次美妙的探索，充满乐趣的旅程
+
+# 封面
+cover-image: "./cover.jpg"
