@@ -4,7 +4,7 @@
 
 ### react 哲学的问题
 
-问题：react开发包含了哪些步骤
+问题： react开发包含了哪些步骤
 
 问题： 如何将UI拆解为组件层级的结构
 
@@ -20,11 +20,11 @@
 
 问题： 什么是dry
 
-问题：为啥要找出绝对精简的state
+问题： 为啥要找出绝对精简的state
 
-问题 如何 验证state应该被放置在哪里
+问题： 如何 验证state应该被放置在哪里
 
-问题 交互函数放到哪里
+问题: 交互函数放到哪里
 
 
 ### oreact 哲学的问题详情
@@ -129,3 +129,141 @@ don't repeat yourself,避免重复
 ##### 问题： 交互函数放到哪里
 
 交互函数放到哪里和state相关，确定了state的位置，如果一个函数影响这个这个state，那么这个交互函数就应该被定义在这个函数的部分
+
+
+## react 官网教程基本
+
+### react 官网教程基本的问题
+
+问题： 创建react应用的方式
+
+问题： react中常用的ts类型
+
+问题： 常见方法的ts知识
+
+问题： 常见事件ts
+
+问题： React 开发者工具
+
+问题： React Compiler 介绍
+
+问题： immer 进行state更新
+
+问题： Object.freeze 介绍
+
+问题： immer freeze和produce的原理，简单说说
+
+### react 官网教程基本的详情
+
+##### 问题： 创建react应用的方式
+
+- [Next.js 的 App Router](https://nextjs.org/docs)   是一个 React 框架，充分利用了 React 的架构，支持全栈 React 应用。 主要部署到node.js或serverless的托管平台，或者部署到你自己的服务器。
+
+- [React Router](https://reactrouter.com/start/framework/installation)   可以与 Vite 结合创建一个全栈 React 框架，标准的web api 
+
+- [Expo](https://expo.dev/)  让你可以创建支持真正原生 UI 的通用 Android、iOS 和 Web 应用  react native
+
+- [从零开始构建 React 应用](https://zh-hans.react.dev/learn/build-a-react-app-from-scratch)
+
+##### 问题： react中常用的ts类型
+
+- 尝试阅读 @types/react   [DefinitelyTyped 的 React 目录中](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react/index.d.ts)
+
+- Dom 事件 写独立的事件处理函数，需要明确定义函数参数的类型，React.ChangeEvent<HTMLInputElement>,完整列表可以在 [这里](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/b580df54c0819ec9df62b0835a315dd48b8594a9/types/react/index.d.ts#L1247C1-L1373) 查看
+
+- 子元素。 React.ReactNode 在JSX中作为子元素传递的所有可能类型的并集,React.ReactElement 它只包括JSX元素，而不包括js原始类型，如string或number
+
+- 样式属性 React.CSSProperties
+
+##### 问题： 常见方法的ts知识
+
+useState,useContext在初始化不是唯一的泛型，需要使用时加问号，可以通过一个hook来排除控制。判断为空抛出错误
+
+useReducer, reducer函数第二个参数是个数组(A extends AnyActionArg),表示个dispatch接受多个参数，useReducer<S,A>((prevState, actions:[A]))
+
+useRef<T>,参数可以是T，T|null，T|undefined,当时undefiend不可以给null，主要是看元素上的ref如何？元素上的ref接收Ref<T>,RefCallback<T> | RefObject<T | null> | null,就是返回泛型或者null。所以是元素时默认值需要是null，或者在ref中写函数，使用undefined
+
+##### 问题： 常见事件ts
+
+事件常见的属性
+
+currentTarget: 注册事件函数的元素
+
+target: 触发事件的的元素，有可能target是currentTarge的子元素
+
+##### 问题： React 开发者工具
+
+使用 React 开发者工具检查 React components，编辑 props 和 state，并识别性能问题。
+
+##### 问题： React Compiler 介绍
+
+React Compiler 是一个处于 Beta 阶段的新的编译器。 它是一个仅在构建时使用的工具，可以自动优化你的 React 应用程序。它可以与纯 JavaScript 一起使用，并且了解 React 规则，因此你无需重写任何代码即可使用它。
+
+##### 问题： immer 进行state更新
+
+use-immer给出连个方法，userImmer和useImmerReduce，如果状态是嵌套的对象，使用immer修改起来很方便
+
+useImmer返回的一个只读的状态值，和一个设置函数，一般会使用时，传递一个更新函数，函数接受原来的state，可以和immer的produce方法一样直接修改该对象，会返回新的基于修改后的值返回的新的不可变对象
+
+useImmerReduce在useReduce基础上，将第一个参数，reducer，方法的使用produce包装，即reuder接受的状态是收到produce监控的值
+
+
+##### 问题： Object.freeze 介绍
+
+冻结整个对象的属性，每个属性的writable和configuable置为false，对象的preventExtension置为false。它是浅冻结
+
+
+##### 问题： immer freeze和produce的原理，简单说说
+
+用 Proxy 把“可变式写法”偷偷转成“不可变式结果”，并在完成后递归 Object.freeze 锁定对象——既让开发者写得舒服，又保证状态真不可变。
+
+freeze通过Object.freeze方法，深度freeze，避免循环引用,判断是否为引用类型**obj!==null && typeof obj==='objject'**,遍历对象 const key of Object.keys(obj)
+
+produce原理待补充
+
+
+## 保持组件纯粹
+
+通过将组件按纯函数严格编写，以避免一些随着代码库的增长而出现的、令人困扰的 bug 以及不可预测的行为。但为了获得这些好处，你需要遵循一些规则。
+
+## 保持组件纯粹的问题
+
+问题： 纯函数是什么，在React中的具体表现
+
+问题： 副作用是什么，在React中的具体表现
+
+问题： React为何侧重于纯函数
+
+问题： 哪些地方可能引发副作用
+
+## 保持组件纯粹的详情
+
+##### 问题： 纯函数是什么，在React中的具体表现
+
+纯函数的特征：1)只负责自己的任务。不会更改函数调用前就已存在的对象或变量,2)输入相同，则输出相同.不符合纯函数的是函数有副作用。
+
+React 便围绕着这个概念进行设计。**React 假设你编写的所有组件都是纯函数。**也就是说，对于相同的输入，你所编写的 React 组件必须总是返回相同的 JSX。
+
+改变了预先存在的变量的值，称为突变，mutation。 纯函数不会改变函数作用域外的变量，或在函数调用前创建的对象--这会使函数变得不纯粹。
+
+##### 问题： 副作用是什么，在React中的具体表现
+
+和纯函数的特征想法的现象，副作用描述了函数会改变函数作用域外的变量或者函数调用前创建的对象--即这会使函数变得不纯粹。对React来说React渲染过程必须是纯粹的，相同的输入返回相同的jsx，也不改变在渲染前已经存在的对象或者变量，这会使它变得不纯粹。一般来说你不应期望你的组件会按照某个顺序来渲染。副作用的重点是在对外部的对象的影响，函数内部的改变是局部突变，内部突变是没有问题的。对于react来说渲染过程中的局部修改也是没有问题的。
+
+
+##### 问题： React为何侧重于纯函数
+
+1. 可预测性 相同的输入返回相同的结果，可以满足在不同环境上，例如在服务器上。
+
+2. 可以安全的缓存。由于有相同的输入输出，react可以安全的将相同的输入结果缓存，跳过渲染。相同的输入可以用来作为判断，完成记忆化，跳过渲染和渲染移到worker等高级优化
+
+3. 并发模式准备 react渲染过程中可能在后台暂停、回复和取消一次渲染。 
+
+构建的每个 React 新特性都利用到了纯函数。从数据获取到动画再到性能，保持组件的纯粹可以充分释放 React 范式的能力。
+
+##### 问题： 哪些地方可能引发副作用
+
+更新屏幕、启动动画、更改数据，它们是额外发生的事情，和渲染过程无关。
+在 React 中，副作用通常属于 事件处理程序。事件处理程序是 React 在你执行某些操作（如单击按钮）时运行的函数。即使事件处理程序是在你的组件 内部 定义的，它们也不会在渲染期间运行！ 因此事件处理程序无需是纯函数。
+如果你用尽一切办法，仍无法为副作用找到合适的事件处理程序，你还可以调用组件中的 useEffect 方法将其附加到返回的 JSX 中。这会告诉 React 在渲染结束后执行它。然而，这种方法应该是你最后的手段。
+如果可能，请尝试仅通过渲染过程来表达你的逻辑。你会惊讶于这能带给你多少好处！
