@@ -153,6 +153,14 @@ don't repeat yourself,避免重复
 
 问题： immer freeze和produce的原理，简单说说
 
+问题：自己开发的produce的思路
+
+问题：自己开发的produce的问题
+
+symbo作为属性和普通的字符串有什么不同
+
+问题：实际produce方法的原理
+
 ### react 官网教程基本的详情
 
 ##### 问题： 创建react应用的方式
@@ -219,7 +227,27 @@ useImmerReduce在useReduce基础上，将第一个参数，reducer，方法的�
 
 freeze通过Object.freeze方法，深度freeze，避免循环引用,判断是否为引用类型**obj!==null && typeof obj==='objject'**,遍历对象 const key of Object.keys(obj)
 
-produce原理待补充
+#### 问题：自己开发的produce的思路
+
+produce有点类似于valtio通过递归proxy来代理整个对象。实现思路是每次访问对象实际是访问一个代理对象。一开始对根对象代理，Proxy(root,handlers),在handler中的get方法，如果访问的值是一个引用类型，继续对这个引用类型进行代理，Proxy(root[p],handlers),这个递归包裹在一个getProxy函数中，还有个参数changedInfo({changeData,parentProp}[])记录了父元素的建克隆和当前对象在父元素的键值 parentProp.在set方法中判断如果当前set的值不相等，那么进行回溯,清空changeInfo数组，进行回溯赋值。
+
+#### 问题：自己开发的produce的问题
+
+对当前对象克隆时，使用了对象扩展运算法，newObj={...obj}，这种方法不能够对数组生效。比较用了lodash的isEqual这是深度比较，是没有用的。采取了在get节点复制，而不是写入复制。没有写delete方法。在写入时每次都回溯来改变值，而不是在完成后进行一次回溯，没有冻结数据，返回不可变数据。
+
+#### symbo作为属性和普通的字符串有什么不同
+
+symbo是唯一的不会与用户定义的键值相冲突;大多数日常操作"for in","Object.keys","JSON.stringify"等不会枚举Symbol键，因此对调用着来说不可见
+
+#### 问题：实际produce方法的原理
+
+实际的immer中的实现，是通过在创建代理时，创建一个state对象，该对象有base（初始对象），copy（复制对象），modified，parent，记录对当前对象的修改，然后将当前对象向下传入下个递归。然后使用了symbol作为键值，DRAFT_STATE
+
+
+Proxy的逻辑,每当get时，判断当前键值是否是DRAFT_STATE,如果是返回state（说明是内部访问）。如果不是说明访问原来对象的属性，判断当前对象是否改变没改变取原来的对象，改变了取copy；获取值，如果值是对象或者数组，继续递归代理。当set时，判断当前对象是否已经修改过，没修改过设置copy为浅克隆base。并且回溯parent一直浅克隆base为copy并且将parent的modified置为true。在进行set操作。deleteProperty代理和set是样的。
+
+finalize函数是解决的写复制回溯需要修改多次parent。finalize参数是proxy。通过proxy获取state。判断是否修改没有修改就返回base，如果修改了，将result先置为copy。遍历改对象，若果值满足draft（说明获取过），返回递归的finalize。
+
 
 
 ## 保持组件纯粹

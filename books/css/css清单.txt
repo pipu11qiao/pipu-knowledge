@@ -1,0 +1,68 @@
+
+# js 基本知识
+
+## 基本语法
+
+### 基本语法详情
+
+##### 问题：const key in obj 和 const key of obj 的区别
+
+**key in**用于对象，会遍历继承的属性，需要hasOwnProperty来守护,不保证遍历键的顺序 ,**key of**用于数组和可迭代对象不会遍历继承的属性,可以保证遍历键的顺序.
+
+
+下面这份清单把 **“前端开发不可不熟的 CSS 基础”** 按知识块分组，方便你自检与查漏。每一项都附带一句“为什么要懂”和一个简洁示例，帮助你快速建立“概念-→用途-→代码” 的桥梁。
+
+
+### 5. 响应式与视窗
+- 视口单位 `vw/vh/vmin/vmax`、断点策略  
+- 媒体查询 `@media (min-width: 768px)`  
+- 移动端常见痛点：点击延迟、`meta viewport`、安全区域(env(safe-area-inset-*))
+
+### 6. 尺寸与单位
+- 绝对：px, pt, cm  
+- 相对：em, rem, %  
+- 动态：`clamp()`, `calc()`, `min()`, `max()`
+
+### 7. 字体与排版
+- 字体栈、`font-display`, `@font-face`  
+- 行盒计算：`line-height`, vertical-align  
+- 文本溢出：`text-overflow: ellipsis; white-space: nowrap;`
+
+### 8. 颜色与图形
+- 颜色格式：hex / rgb(a) / hsl(a) / lch()  
+- 渐变：`linear-gradient`, `radial-gradient`  
+- 阴影：`box-shadow`, `filter: drop-shadow()`
+
+### 9. 视觉动效
+- 过渡 `transition: property duration timing-function`  
+- 关键帧动画 `@keyframes`、`animation`  
+- 2D/3D 变换 `transform: translate / scale / rotate / perspective`
+
+### 10. 变量与现代特性
+- **CSS 变量**：作用域、级联、动态主题  
+```css
+:root { --brand: #38bdf8; }
+button { background: var(--brand); }
+```
+- **`@layer` 与 Cascade-Level**（更细粒度控制层叠）  
+- **容器查询**：`@container`（组件级响应式）
+
+### 11. 架构与规范
+- 命名体系：BEM、SUIT、Atomic CSS  
+- 重置/归一化：`normalize.css`、`modern-css-reset`  
+- 辅助工具：Lint（stylelint）、预处理（Sass/SCSS）、PostCSS、Autoprefixer
+
+### 12. 性能 & 可访问性
+- 减少重排重绘：合成层、`will-change` 慎用  
+- 首屏加载优化：Critical CSS、内容可见性 `content-visibility`  
+- 无障碍：可聚焦元素 `:focus-visible`、高对比主题
+
+---
+
+## 学习与实践建议
+1. **浏览器开发者工具** 是最快的反馈回路，多用 “Inspect Element” 拖改属性。  
+2. **做一个 Tiny-UI 库**：按钮、输入框、卡片，从样式到交互全链路练手。  
+3. **CodePen/PlayCode 日更小练习**：每天用一种 CSS 特性实现一个小效果。  
+4. **阅读优秀源码**：Tailwind、Bootstrap、Material-UI，都把 CSS 工程化思路写给你看。  
+
+把上面 12 大块逐一过一遍，配合动手实验，你就能把常用 CSS 基础打牢，面对设计稿或重构旧站都能游刃有余。祝学习顺利！

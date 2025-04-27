@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:test": "cd ./books/test && pandoc ./base.md  --metadata-file=./meta.yaml --css=../config/doc-style.css  --wrap=preserve  --highlight-style=tango  -o pipu-book-test.epub ",
     "build:life": "cd ./books/life && pandoc ./人性的弱点.md ./软技能.md  --metadata-file=./meta.yaml --css=../config/doc-style.css --wrap=preserve  --highlight-style=tango  -o pipu-book-life.epub ",
-    "build:work": "cd ./books/work && pandoc ./react.md  --metadata-file=./meta.yaml --css=../config/doc-style.css --wrap=preserve  --highlight-style=tango  -o pipu-book-work.epub "
+    "build:work": "cd ./books/work && pandoc ./react.md  --metadata-file=./meta.yaml --css=../config/doc-style.css --wrap=preserve  --highlight-style=tango  -o pipu-book-work.epub ",
+    "build:css": "cd ./books/css && pandoc ./css基本.md  --metadata-file=./meta.yaml --css=../config/doc-style.css --wrap=preserve  --highlight-style=tango  -o pipu-book-css.epub "
   },
   "repository": {
     "type": "git",
