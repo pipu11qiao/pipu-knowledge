@@ -29,6 +29,16 @@
 
 问题： 媒体查询
 
+问题： 移动端的一些布局相关的问题 
+
+问题： touch-action的作用
+
+问题： 尺寸与单位
+
+问题： 字体与排版
+
+问题： 动效
+
 
 ### css 基本的详情
 
@@ -170,3 +180,44 @@ position: static | relative | absolute | fixed | sticky
 尺寸断点， /* 设备宽度在 768 – 1023 px 之间 */ @media (min-width: 768px) and (max-width: 1023px) { … } 
 
 CSS Media Queries Level 4 允许“比较运算符”： @media (768px <= width <= 1023px) { … } @media (width > 1200px)          { … }   /* 仅超宽屏 */
+
+
+##### 问题： 移动端的一些布局相关的问题 
+
+视窗单位,vw/vh/vmin/vmax,vmin宽度和高度较小的1%
+
+\<meta\>决定了布局视口（viewport）得缩放行为，是移动端布局的核心开关，最常用的写法\<meta name="viewport" content="width=device-width,initial-scale=1" /\>
+
+
+width=device-width:	布局宽度 = 设备 CSS 像素宽度，配合媒体查询最稳妥。; initial-scale=1:	首屏不缩放。; maximum-scale=1,user-scalable=no:	慎用！ 禁止手势放大虽能消除 300 ms 延迟，但对无障碍阅读不友好；若非交互型 App 场景不建议关。 ;viewport-fit=cover:	针对刘海／挖孔设备（iPhone X 及以后）；与安全区域下一节搭配。
+
+安全区域（Safe Area）与 env(safe-area-inset-*),带刘海、挖孔或底部 Home Indicator 的设备，其物理屏幕虽大，但有一部分「不可用」。以往 iOS 会自动给 <body> 加 padding，但 viewport-fit=cover 之后就 交由开发者自己处理。 env(safe-area-inset-top)	状态栏／刘海高度 env(safe-area-inset-right)	右侧圆角或曲边距离 env(safe-area-inset-bottom)	底部 Home Indicator 高度 env(safe-area-inset-left)	左侧圆角或曲边距离
+
+先写对 meta：width=device-width,initial-scale=1,viewport-fit=cover。 再杀延迟：touch-action: manipulation 或需要时绑定 touchend。 最后护安全区：用 env(safe-area-inset-*) 动态补 padding / margin。
+
+##### 问题： touch-action的作用
+
+touch-action: manipulation 是 CSS 属性，旨在控制用户与触摸设备交互时的行为，尤其是与 触摸事件 和 缩放操作 相关的行为。 禁用缩放、双指旋转、拖拽手势 等操作，但保留滚动功能。 允许开发者精确控制触摸事件的行为，避免浏览器进行自动缩放或拖拽等默认操作。
+
+
+适用场景： 按钮点击：当你希望优化 点击响应速度，防止浏览器在点击时延迟，touch-action: manipulation 可以帮助移除延迟和默认行为（如缩放）。 自定义触摸事件：你可能希望监听触摸事件（touchstart, touchmove, touchend）并处理它们，而不希望浏览器对这些手势进行任何干预。
+
+
+##### 问题： 尺寸与单位
+
+绝对：px, pt, cm ;相对：em, rem, %  ; 动态：`clamp()`, `calc()`, `min()`, `max()`;clamp(minimum, preferred, maximum).font-size: clamp(1rem, 5vw, 3rem);最小值是 1rem，如果计算出来的字体大小小于 1rem，则会使用 1rem。 最大值是 3rem，如果计算出来的字体大小大于 3rem，则会使用 3rem。 默认情况下，字体大小会根据视口宽度（5vw）动态变化。
+
+##### 问题： 字体与排版
+
+字体控制,font-family字段，font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;按照顺序判断本地是否有改字体，若有就使用。font-display 是用在 @font-face 规则里，控制网页加载字体时的行为策略。 重点解决：网页加载时字体未加载完成时的显示策略（比如防止白屏）。auto;block;swap;fallback;optional; swap-不等待字体加载，立即用备用字体显示；字体加载后无缝替换。体验最佳，推荐。@font-face,@font-face 是 CSS 提供的指令，可以让网页引入自定义字体文件，即使用户设备本地没有安装该字体，也能正常显示。
+
+##### 问题： 动效
+
+transition: all .3s ease;
+
+transform: translate/scale/rotate/perspective;
+
+动画：@keyframes 语法 @keyframes 动画名称 { 0% {  初始状态  } 50% { 中间状态 } 100% { 结束状态 } }或者 @keyframes 动画名称 { from { 等同于 0% } to { 等同于 100% } }
+
+
+animation属性 animation-name: 动画名称; animation-duration: 持续时间; animation-timing-function: 速度曲线; animation-delay: 延迟开始时间; animation-iteration-count: 播放次数; animation-direction: 方向; animation-fill-mode: 动画结束后状态; animation-play-state: 是否播放中; animation: 动画名称 动画时间 速度曲线 延迟时间 播放次数 方向 填充模式 播放状态;
